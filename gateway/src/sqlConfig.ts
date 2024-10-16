@@ -3,11 +3,11 @@ import { Knex } from 'knex';
 const knexConfig: Knex.Config = {
   client: 'pg',
   connection: {
-    host: 'localhost',
-    port: 5432,
-    user: 'root',
-    password: 'umc',
-    database: 't01'
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || '5432'),
+    user: process.env.DB_HOST,
+    password: process.env.DB_HOST,
+    database: process.env.DB_HOST
   }
 };
 
