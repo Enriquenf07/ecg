@@ -21,12 +21,10 @@ export function ensureAuthenticated(
         throw new Error('Bad Request')
     }
     try {
-      // Validar se token é válido
       const { sub } = verify (
         token,
         secret
       ) as IPayload;
-
       request.headers['userId'] = sub;
       console.log(request.headers)
       return next();

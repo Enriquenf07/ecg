@@ -1,0 +1,58 @@
+version: '3.0'
+services:
+  gateway:
+    build:
+      context: ./gateway
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_USER=${DB_USER}
+      - JWT_SECRET=PE2WtjEFhdL5kQZYXCueHL0GdTjSbYskBF9JsWMLFVTfYDq16O67eXrSWWQwDmSO7g9gxizSuOhmxcnfYMD2Bw
+      - DB_HOST=db
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SPRING_HOST=spring-app
+      - DB_DATABASE=p01
+    depends_on:
+      - db
+
+  spring-app:
+    build:
+      context: ./app
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_HOST=db
+      - DB_DATABASE=p01
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+
+  remix-app:
+    build:
+      context: ./client
+    ports:
+      - "3005:3000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    ports:
+      - "5555:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=p01
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - gateway
+
