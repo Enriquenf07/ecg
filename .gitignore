@@ -1,3 +1,4 @@
 dev/
 /data
 postgres/test
+.env

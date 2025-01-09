@@ -36,5 +36,5 @@ exports.route = (0, express_1.Router)();
 app.use(express_1.default.json());
 app.use(userController_1.userRoute);
 app.use(ensureAuthentication_1.ensureAuthenticated);
-app.use('/api', (0, express_http_proxy_1.default)('localhost:3000'));
+app.use('/api', (0, express_http_proxy_1.default)('gateway:3000'));
 app.listen(3333, () => 'server running on port 3333');

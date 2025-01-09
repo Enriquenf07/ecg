@@ -10,7 +10,7 @@ export const loader = async ({ request, params }: { request: any, params: any })
     const finalToken = await jwtLoader({ request })
     const { id } = params
     if (!finalToken) return null
-    const response = await axios.get(`http://localhost:5000/api/modulo/${id}/iniciar-teste`, {
+    const response = await axios.get(`http://gateway:5000/api/modulo/${id}/iniciar-teste`, {
         headers: {
             'Authorization': `Bearer ${finalToken}`,
         },
@@ -32,7 +32,7 @@ export default function Index() {
                 <div className="flex flex-col gap-3">
                     {Object.entries(data.exercicios.find((i: any) => i.numero == index).alternativas).filter(item => item[1] != null).map(([key, value]: any) => (
                         <Button className={`${data.exercicios.find((i: any) => i.numero == index).resposta === key ? 'bg-amber-300' : 'bg-violet-300'} hover:bg-violet-600`} onClick={async () => {
-                            await axios.post(`http://localhost:5000/api/modulo/${id}/teste/${index}/${key}`, {}, {
+                            await axios.post(`http://gateway:5000/api/modulo/${id}/teste/${index}/${key}`, {}, {
                                 headers: {
                                     'Authorization': `Bearer ${data.token}`,
                                 },

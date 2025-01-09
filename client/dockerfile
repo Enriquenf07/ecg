@@ -1,12 +1,6 @@
-FROM node:18 AS build
+FROM node:18
 WORKDIR /app
-COPY package.json package-lock.json ./
+ADD . .
 RUN npm install
-COPY . .
 RUN npm run build
-
-FROM node:18-slim
-WORKDIR /app
-COPY --from=build /app/build ./build
-EXPOSE 3000
 CMD ["npm", "start"]

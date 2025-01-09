@@ -3,7 +3,7 @@ import axios from "axios";
 export const ModuloService = (token: string) => {
     
     const carregar = async (id: number) => {
-        const response = await axios.get(`http://localhost:5000/api/modulo/${id}`, {
+        const response = await axios.get(`http://gateway:5000/api/modulo/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -15,7 +15,7 @@ export const ModuloService = (token: string) => {
     
 
     const carregarVideo = async (id: number) => {
-        const response = await axios.get(`http://localhost:5000/api/video/${id}`, {
+        const response = await axios.get(`http://gateway:5000/api/video/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -26,7 +26,7 @@ export const ModuloService = (token: string) => {
     }
 
     const resultados = async (id: number) => {
-        const response = await axios.get(`http://localhost:5000/api/modulo/${id}/resultado`, {
+        const response = await axios.get(`http://gateway:5000/api/modulo/${id}/resultado`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -36,7 +36,7 @@ export const ModuloService = (token: string) => {
     }
 
     const encerrarTeste = async (id: number) => {
-        const response = await axios.post(`http://localhost:5000/api/modulo/${id}/encerrar-teste`, {}, {
+        const response = await axios.post(`http://gateway:5000/api/modulo/${id}/encerrar-teste`, {}, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -46,7 +46,7 @@ export const ModuloService = (token: string) => {
     }
 
     const carregarExercicios = async (id: number, teste: number) => {
-        const response = await axios.get(`http://localhost:5000/api//modulo/${id}/resultado/${teste}`, {
+        const response = await axios.get(`http://gateway:5000/api//modulo/${id}/resultado/${teste}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },

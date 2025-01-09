@@ -29,6 +29,7 @@ export function ensureAuthenticated(
       console.log(request.headers)
       return next();
     } catch (err) {
+      console.log(err)
       return response.status(401).end();
     }
   }

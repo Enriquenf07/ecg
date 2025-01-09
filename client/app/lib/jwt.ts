@@ -13,7 +13,7 @@ export const jwtLoader = async ({ request }: { request: any }) => {
         return null
     }
     try {
-        const response = await axios.get('http://localhost:5000/validateToken', {
+        const response = await axios.get('http://gateway:5000/validateToken', {
             headers: {
                 'Authorization': `Bearer ${finalToken}`,
             },

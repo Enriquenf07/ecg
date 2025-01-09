@@ -42,7 +42,9 @@ export const action = async ({ request }: { request: any }) => {
     const password = formData.get("password");
 
     try {
-        const response = await axios.post('http://localhost:5000/login', { login, password });
+        console.log('logandooooo')
+        const response = await axios.post('http://gateway:5000/login', { login, password });
+        console.log(response)
         const token = response.data.accessToken
         if (token) {
             const cookieHeader = await jwtCookie.serialize(token);
@@ -55,6 +57,7 @@ export const action = async ({ request }: { request: any }) => {
 
         return redirect('/login?message=Login ou senha inválidos');
     } catch (e) {
+        console.log('erro ao efetuar chamada na api')
         return redirect('/login?message=Login ou senha inválidos');
     }
 };

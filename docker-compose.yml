@@ -1,5 +1,17 @@
 version: '3.0'
 services:
+  spring-app:
+    build:
+      context: ./app
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_HOST=${DB_HOST}
+      - DB_DATABASE=t01
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SPRING_ENV=prod
+ 
   gateway:
     build:
       context: ./gateway
@@ -8,27 +20,20 @@ services:
     environment:
       - DB_USER=${DB_USER}
       - JWT_SECRET=PE2WtjEFhdL5kQZYXCueHL0GdTjSbYskBF9JsWMLFVTfYDq16O67eXrSWWQwDmSO7g9gxizSuOhmxcnfYMD2Bw
-      - DB_HOST=localhost
+      - DB_HOST=${DB_HOST}
       - DB_PASSWORD=${DB_PASSWORD}
-      - SPRING_HOST=spring-app
+      - SPRING_HOST=spring-appa
       - DB_DATABASE=t01
+    depends_on:
+      - spring-app
 
-  spring-app:
-    build:
-      context: ./app
-    ports:
-      - "8080:8080"
-    environment:
-      - DB_USER=${DB_USER}
-      - DB_HOST=localhost
-      - DB_DATABASE=t01
-      - DB_PASSWORD=${DB_PASSWORD}
- 
   remix-app:
     build:
       context: ./client
     ports:
       - "3005:3000"
+    depends_on:
+      - gateway
 
   nginx:
     image: nginx:latest
