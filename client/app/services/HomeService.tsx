@@ -3,7 +3,7 @@ import axios from "axios";
 export const AulasService = (token: string) => {
     
     const pesquisar = async () => {
-        const response = await axios.get(`https://${process.env.API_HOST}/api/aula/`, {
+        const response = await axios.get(`${process.env.API_HOST}/api/aula/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -12,7 +12,7 @@ export const AulasService = (token: string) => {
     }
 
     const pesquisarModulos = async (id: number) => {
-        const response = await axios.get(`https://${process.env.API_HOST}/api/aula/${id}`, {
+        const response = await axios.get(`${process.env.API_HOST}/api/aula/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -21,7 +21,7 @@ export const AulasService = (token: string) => {
     }
 
     const carregar = async (id: number) => {
-        const response = await axios.get(`https://${process.env.API_HOST}/api/aula/${id}/info`, {
+        const response = await axios.get(`${process.env.API_HOST}/api/aula/${id}/info`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
