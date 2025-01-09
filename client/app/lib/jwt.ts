@@ -9,7 +9,6 @@ export const jwtLoader = async ({ request }: { request: any }) => {
     const encodedToken = cookies.jwt || ""
     const token = Buffer.from(encodedToken, 'base64').toString('utf8')
     const finalToken = token.replace(/"/g, '').trim()
-    console.log(token)
     if (!cookies.jwt) {
         return null
     }

@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+// ADICIONAR COLUNA DE DATA_ENCERRAMENTO !!!!!!
 public class Teste {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +28,8 @@ public class Teste {
     private boolean emAndamento;
     @Column(name = "data_hora")
     private LocalDateTime dataHora;
+    @Column(name = "hora_encerramento")
+    private LocalDateTime horaEncerramento;
     private Integer acertadas;
     @Transient
     private Set<TesteQuestao> exercicios;

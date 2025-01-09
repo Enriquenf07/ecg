@@ -1,8 +1,9 @@
 package com.ecg.app.services;
 
 import com.ecg.app.beans.UsuarioBean;
+import com.ecg.app.dto.ExercicioDTO;
+import com.ecg.app.dto.ModuloDTO;
 import com.ecg.app.dto.TesteDTO;
-import com.ecg.app.forms.TesteForm;
 import com.ecg.app.models.Modulo;
 import com.ecg.app.models.Teste;
 import com.ecg.app.models.TesteQuestao;
@@ -11,10 +12,12 @@ import com.ecg.app.repositories.TesteQuestaoRepository;
 import com.ecg.app.repositories.TesteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -49,21 +52,41 @@ public class ModuloService {
         teste.setExercicios(testeRepository.findExercicios(teste));
         return new TesteDTO(teste);
     }
-
+    @Transactional
     public TesteDTO encerrarTeste(Integer id) {
         Modulo modulo = repository.findById(id).orElseThrow();
         Teste teste = testeRepository.findByUsuarioAndModuloAndEmAndamento(bean.getUser(), modulo, true).orElse(new Teste());
+        repository.setModuloConcluido(modulo, bean.getUser());
         teste.init();
         teste.setEmAndamento(false);
         teste.setExercicios(testeRepository.findExercicios(teste));
+        teste.setHoraEncerramento(LocalDateTime.now());
         testeRepository.save(teste);
-        testeQuestaoRepository.saveAll(teste.getExercicios());
         teste.getExercicios().forEach(item -> {
             if(item.getRespostaCerta().equals(item.getResposta())){
                 teste.setAcertadas(teste.getAcertadas() + 1);
             }
         });
+        testeQuestaoRepository.saveAll(teste.getExercicios());
         return new TesteDTO(teste);
+    }
+
+
+
+    public Page<TesteDTO> getUltimoResultado(Integer moduloId, Pageable pageable){
+        if(pageable == null){
+            pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("id")));;
+        }
+        return repository.getResultados(moduloId, bean.getUser().getId(), pageable)
+                .map(TesteDTO::new);
+    }
+
+    public List<ExercicioDTO> carregarTeste(Integer testeId) throws Exception {
+        Teste teste =testeRepository.findById(testeId).orElse(null);
+        if(teste == null || !Objects.equals(teste.getUsuario().getId(), bean.getUser().getId())){
+            throw new Exception();
+        }
+        return testeRepository.carregar(testeId).stream().map(ExercicioDTO::new).collect(Collectors.toList());
     }
 
     public void responder(Integer id, Integer questaoId, String resposta) {
@@ -75,4 +98,11 @@ public class ModuloService {
         questao.setResposta(resposta);
         testeQuestaoRepository.save(questao);
     }
+
+
+    public ModuloDTO carregar(Integer id) throws Exception {
+        Modulo modulo = repository.findById(id).orElseThrow(Exception::new);
+        return new ModuloDTO(modulo.getNome(), modulo.getId(), null);
+    }
+
 }

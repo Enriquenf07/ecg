@@ -3,6 +3,7 @@ package com.ecg.app.controllers;
 import com.ecg.app.forms.TesteForm;
 import com.ecg.app.services.ModuloService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,17 @@ public class ModuloController {
         this.service = service;
     }
 
+    @GetMapping(path = "/modulo/{id}")
+    public ResponseEntity<Object> carregar(@PathVariable(name = "id") Integer id){
+        try{
+            return ResponseEntity.ok(service.carregar(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @GetMapping(path = "/modulo/{id}/iniciar-teste")
     public ResponseEntity<Object> iniciarTeste(@PathVariable(name = "id") Integer id){
-
         return ResponseEntity.ok(service.iniciarTeste(id));
     }
 
@@ -40,5 +48,20 @@ public class ModuloController {
     ){
         service.responder(id, questao, resposta);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/modulo/{id}/resultado")
+    public ResponseEntity<Object> resultado(@PathVariable(name = "id") Integer id,
+                                            @RequestBody(required = false) Pageable pageable){
+        return ResponseEntity.ok(service.getUltimoResultado(id, pageable));
+    }
+
+    @GetMapping(path = "/modulo/{id}/resultado/{teste}")
+    public ResponseEntity<Object> resultado(@PathVariable(name="teste") Integer teste){
+        try{
+            return ResponseEntity.ok(service.carregarTeste(teste));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

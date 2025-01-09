@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Entity
 @Table(name = "teste_usuario_questao")
@@ -18,7 +19,7 @@ public class TesteQuestao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Transient
-    private HashMap<String, String> alternativas;
+    private HashMap<String, Object> alternativas;
     @Transient
     private String enunciado;
     private Integer numero;

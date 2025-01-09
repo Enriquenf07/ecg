@@ -25,8 +25,7 @@ app.use(ensureAuthenticated)
 app.use('/api', proxy('localhost:8080', {
     userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
         console.log("Status Code", proxyRes.statusCode)
-        console.log("Response Body", proxyResData.toString())
-        return "OK"; // it should return string
+        return proxyResData;
     }
 }));
 
