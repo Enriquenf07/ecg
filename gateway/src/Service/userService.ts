@@ -14,6 +14,12 @@ interface IUser {
     senha: string
 }
 
+interface IUserCadastro {
+    email: string
+    login: string
+    senha: string
+}
+
 export const login = async ({ userReq, passwordReq }: IUserLogin) => {
     console.log(userReq)
     const { id, login: user, senha: password }: IUser = await knex.select('*').from('usuario').where('login', userReq).first()
@@ -41,4 +47,8 @@ export const login = async ({ userReq, passwordReq }: IUserLogin) => {
     }catch(e){
         console.log(e)
     }
+}
+
+export const cadastro = async(cadastro: IUserCadastro) => {
+    knex('usuario').insert(cadastro)
 }
