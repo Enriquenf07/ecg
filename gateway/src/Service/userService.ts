@@ -52,10 +52,9 @@ export const login = async ({ userReq, passwordReq }: IUserLogin) => {
 export const cadastro = async (cadastro: IUserCadastro) => {
     await knex.transaction(async (trx) => {
         const senhaHash = await hash(cadastro.senha, 12)
-        const usuario = (await trx('usuario').returning('id').insert({ ...cadastro, senha: senhaHash }))
+        const usuario:{id: number}[] = (await trx('usuario').returning('id').insert({ ...cadastro, senha: senhaHash }))
         const modulos = await trx('modulo').select('id')
-        console.log(usuario[0].id, modulos)
-        const modulosF = await Promise.all(modulos.map(async (idModulo) => ({ modulo: idModulo.id, usuario: usuario[0].id, concluido: false })))
+        const modulosF = await Promise.all(modulos.map(async (modulo) => ({ modulo: modulo.id, usuario: usuario[0].id, concluido: false })))
         console.log(modulosF)
         await trx('modulo_usuario').returning('id').insert(modulosF)
     })
