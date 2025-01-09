@@ -19,9 +19,10 @@ userRoute.post('/cadastro', async (req: Request, res: Response) => {
     try{
         const {login, senha, email} = req.body
         await cadastro({login, senha, email})
+        res.json()
     }catch(e){
         console.log(e)
-        return res.status(505);
+        return res.status(400).json();
     }
 
 })

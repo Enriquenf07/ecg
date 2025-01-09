@@ -30,12 +30,12 @@ export const login = async ({ userReq, passwordReq }: IUserLogin) => {
     }
     console.log(id)
     const secret = process.env.JWT_SECRET
-    if(!secret){
+    if (!secret) {
         console.log('oiii')
         throw new Error('Bad Request')
-        
+
     }
-    try{
+    try {
         const token = sign(
             { user: user, },
             secret,
@@ -43,12 +43,21 @@ export const login = async ({ userReq, passwordReq }: IUserLogin) => {
                 subject: id.toString(), expiresIn: "1d",
             }
         );
-        return {accessToken: token}
-    }catch(e){
+        return { accessToken: token }
+    } catch (e) {
         console.log(e)
     }
 }
 
-export const cadastro = async(cadastro: IUserCadastro) => {
-    knex('usuario').insert(cadastro)
+export const cadastro = async (cadastro: IUserCadastro) => {
+    await knex.transaction(async (trx) => {
+        const senhaHash = await hash(cadastro.senha, 12)
+        const usuario = (await trx('usuario').returning('id').insert({ ...cadastro, senha: senhaHash }))
+        const modulos = await trx('modulo').select('id')
+        console.log(usuario[0].id, modulos)
+        const modulosF = await Promise.all(modulos.map(async (idModulo) => ({ modulo: idModulo.id, usuario: usuario[0].id, concluido: false })))
+        console.log(modulosF)
+        await trx('modulo_usuario').returning('id').insert(modulosF)
+    })
+
 }
