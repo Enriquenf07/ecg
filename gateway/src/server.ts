@@ -19,19 +19,9 @@ app.use((req, res, next) => {
     next();
 });
 
-console.log(process.env.DB_PASSWORD)
-console.log(process.env.DB_HOST)
-
-app.use('/app', proxy('localhost:8080', {
-    userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
-        console.log("Status Code", proxyRes.statusCode)
-        return proxyResData;
-    }
-}));
-
 app.use(userRoute)
 app.use(ensureAuthenticated)
-app.use('/api', proxy('spring-app:8080', {
+app.use('/api', proxy(process.env.SPRING_HOST || '', {
     userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
         console.log("Status Code", proxyRes.statusCode)
         return proxyResData;
