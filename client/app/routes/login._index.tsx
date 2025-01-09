@@ -43,7 +43,7 @@ export const action = async ({ request }: { request: any }) => {
 
     try {
         console.log('logandooooo')
-        const response = await axios.post('http://gateway:5000/login', { login, password });
+        const response = await axios.post('http://${process.env.API_HOST}/login', { login, password });
         console.log(response)
         const token = response.data.accessToken
         if (token) {
