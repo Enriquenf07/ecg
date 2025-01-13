@@ -88,8 +88,8 @@ export default function Index() {
                         <div className="flex flex-col gap-4">
                             <Input className="text-md py-5" placeholder="Login" name="login" />
                             <Input className="text-md py-5" type="password" placeholder="Senha" name="password" />
-                            <button className="border rounded-md p-2 bg-zinc-800 hover:bg-zinc-600 text-white" type="submit">LOGIN</button>
-                            <button className="border rounded-md p-2 bg-zinc-800 hover:bg-zinc-600 text-white">CRIAR CONTA</button>
+                            <button className="active:bg-zinc-400 rounded-md p-2 transition duration-150 ease-in-out bg-zinc-800 text-white" type="submit">LOGIN</button>
+                            <button className="active:bg-zinc-200 rounded-md p-2 transition duration-150 ease-in-out" type="button">CRIAR CONTA</button>
                         </div>
                     </fetcher.Form>
                 </div>
