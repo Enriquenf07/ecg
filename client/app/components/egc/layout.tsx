@@ -31,8 +31,9 @@ const FinalItems = [
     },
 ]
 
-export default function ({ children, items = [] }: { children: React.ReactNode, items?: Array<MenuItem> }) {
-    const newItems = [...InitialItems, ...items, ...FinalItems]
+export default function ({ children, items = [],  noDefaultItens}: 
+    { children: React.ReactNode, items?: Array<MenuItem>, noDefaultItens?: boolean }) {
+    const newItems = !noDefaultItens ? [...InitialItems, ...items, ...FinalItems] : items
     const matches = useMediaQuery('(max-width: 768px)')
     return (
         <Suspense>
