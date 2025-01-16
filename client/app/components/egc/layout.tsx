@@ -31,13 +31,13 @@ const FinalItems = [
     },
 ]
 
-export default function ({ children, items = [],  noDefaultItens}: 
-    { children: React.ReactNode, items?: Array<MenuItem>, noDefaultItens?: boolean }) {
+export default function ({ children, items = [],  noDefaultItens, className}: 
+    { children: React.ReactNode, items?: Array<MenuItem>, noDefaultItens?: boolean, className?: string }) {
     const newItems = !noDefaultItens ? [...InitialItems, ...items, ...FinalItems] : items
     const matches = useMediaQuery('(max-width: 768px)')
     return (
         <Suspense>
-            <SidebarProvider>
+            <SidebarProvider className="flex w-screen">
                 <Sidebar>
                     <Sidebar>
                         <SidebarContent>
@@ -61,9 +61,9 @@ export default function ({ children, items = [],  noDefaultItens}:
                         </SidebarContent>
                     </Sidebar>
                 </Sidebar>
-                <main>
+                <main className="flex-grow">
                     {matches && <SidebarTrigger />}
-                    <div className="p-4 lg:p-12 w-[100vw] lg:w-[70vw]">
+                    <div className={className || "pt-4 pl-4 lg:pt-12 lg:pl-12 h-screen"}>
                         {children}
                     </div>
                 </main>
