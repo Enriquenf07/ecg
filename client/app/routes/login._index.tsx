@@ -28,10 +28,25 @@ const initialForm = {
 export async function loader({ request }: { request: any }) {
     const cookieHeader = request.headers.get('Cookie');
     const cookie = await jwtCookie.parse(cookieHeader);
-    return json({ token: cookie });
+    if(!cookie){
+        return null
+    }
+    try {
+        const response = await axios.get(`${process.env.API_HOST}/validateToken`, {
+            headers: {
+                'Authorization': `Bearer ${cookie}`,
+            },
+        });
+        if (response.status === 200) {
+            return redirect('/app')
+        }
+    }finally{
+        return json({ token: cookie });
+    }
+    
 }
 
-const jwtCookie = createCookie('jwt', {
+export const jwtCookie = createCookie('jwt', {
     httpOnly: true,
     path: '/',
     sameSite: 'lax',
@@ -43,7 +58,6 @@ export const action = async ({ request }: { request: any }) => {
     const password = formData.get("password");
 
     try {
-        console.log(`${process.env.API_HOST}/login`, { login, password })
         const response = await axios.post(`${process.env.API_HOST}/login`, { login, password });
         const token = response.data.accessToken
         if (token) {
@@ -89,7 +103,9 @@ export default function Index() {
                             <Input className="text-md py-5" placeholder="Login" name="login" />
                             <Input className="text-md py-5" type="password" placeholder="Senha" name="password" />
                             <button className="active:bg-zinc-400 rounded-md p-2 transition duration-150 ease-in-out bg-zinc-800 text-white" type="submit">LOGIN</button>
-                            <button className="active:bg-zinc-200 rounded-md p-2 transition duration-150 ease-in-out" type="button">CRIAR CONTA</button>
+                            <button className="active:bg-zinc-200 rounded-md p-2 transition duration-150 ease-in-out" type="button">
+                                <a href="/cadastro">Não possui uma conta? Faça seu cadastro.</a>
+                            </button>
                         </div>
                     </fetcher.Form>
                 </div>

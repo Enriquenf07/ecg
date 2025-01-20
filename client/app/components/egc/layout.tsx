@@ -13,7 +13,7 @@ export interface MenuItem {
 const InitialItems = [
     {
         title: "Página Inicial",
-        url: "/",
+        url: "/app",
         icon: Home,
     },
 ]

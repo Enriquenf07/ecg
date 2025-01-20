@@ -17,9 +17,11 @@ userRoute.post('/login', async (req: Request, res: Response) => {
 
 userRoute.post('/cadastro', async (req: Request, res: Response) => {
     try{
-        const {login, senha, email} = req.body
+        const {login, password: senha, email} = req.body
+        console.log(req.body)
         await cadastro({login, senha, email})
-        res.json()
+        console.log('oiiiiiii')
+        res.status(200).json()
     }catch(e){
         console.log(e)
         return res.status(400).json();
