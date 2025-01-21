@@ -21,17 +21,13 @@ interface IUserCadastro {
 }
 
 export const login = async ({ userReq, passwordReq }: IUserLogin) => {
-    console.log(userReq)
     const { id, login: user, senha: password }: IUser = await knex.select('*').from('usuario').where('login', userReq).first()
     const isPasswordEqual = await compare(passwordReq, password)
-    console.log(isPasswordEqual)
     if (!isPasswordEqual) {
         throw new Error('senha invalida')
     }
-    console.log(id)
     const secret = process.env.JWT_SECRET
     if (!secret) {
-        console.log('oiii')
         throw new Error('Bad Request')
 
     }
@@ -45,7 +41,6 @@ export const login = async ({ userReq, passwordReq }: IUserLogin) => {
         );
         return { accessToken: token }
     } catch (e) {
-        console.log(e)
     }
 }
 
@@ -55,7 +50,6 @@ export const cadastro = async (cadastro: IUserCadastro) => {
         const usuario:{id: number}[] = (await trx('usuario').returning('id').insert({ ...cadastro, senha: senhaHash }))
         const modulos = await trx('modulo').select('id')
         const modulosF = await Promise.all(modulos.map(async (modulo) => ({ modulo: modulo.id, usuario: usuario[0].id, concluido: false })))
-        console.log(modulosF)
         await trx('modulo_usuario').returning('id').insert(modulosF)
     })
 
