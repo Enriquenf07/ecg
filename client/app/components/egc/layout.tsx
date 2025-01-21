@@ -63,7 +63,7 @@ export default function ({ children, items = [],  noDefaultItens, className}:
                 </Sidebar>
                 <main className="flex-grow">
                     {matches && <SidebarTrigger />}
-                    <div className={className || "pt-4 pl-4 lg:pt-12 lg:pl-12 h-screen"}>
+                    <div className={className || "pt-4 pl-4 lg:pt-12 lg:pl-12 lg:pr-12 lg:mb-12 h-screen"}>
                         {children}
                     </div>
                 </main>

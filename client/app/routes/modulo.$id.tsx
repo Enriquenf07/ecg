@@ -38,7 +38,7 @@ export default function Index() {
                             width={'100%'}
                             height={'100%'}
                             controls={true}
-                            url={"https://storage.cloud.google.com/ecg-umc/modulo_1.mp4"}
+                            url={`https://storage.cloud.google.com/ecg-umc/Video-aulas/modulo_${id}.mp4`}
                             config={{
                                 file: {
                                     tracks: [
