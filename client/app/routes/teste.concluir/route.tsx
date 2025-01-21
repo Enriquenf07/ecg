@@ -12,7 +12,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             await ModuloService(finalToken).encerrarTeste(Number(id))
         }
     }catch(e){
-        redirect(`/teste/${id}`)
+        return null
     }
     return redirect(`../resultado/${id}`)
 

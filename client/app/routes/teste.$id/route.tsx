@@ -68,7 +68,7 @@ export default function Index() {
                             <Button onClick={() => setIndex(prev => prev <= 1 ? prev : prev - 1)}>Questão anterior</Button>
                             {index < data.exercicios.length ?
                                 <Button onClick={() => setIndex(prev => prev >= data.exercicios.length ? prev : prev + 1)}>Proxima questão</Button> :
-                                <Form action="teste/concluir" method="post" onSubmit={(e) => {
+                                <fetcher.Form action="teste/concluir" method="post" onSubmit={(e) => {
                                     const formData = new FormData(e.currentTarget);
                                     const respostaData = { ...formData, id }
                                     submit(respostaData, { action: '/teste/concluir' ,method: 'post', });
@@ -77,7 +77,7 @@ export default function Index() {
                                     <Button className="bg-green-600 hover:bg-green-700" type='submit'>
                                         Terminar Teste
                                     </Button>
-                                </Form>
+                                </fetcher.Form>
                             }
                         </div>
                     </>
