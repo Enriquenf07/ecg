@@ -31,7 +31,7 @@ export default function Index() {
         <Layout>
             <div className="flex flex-col gap-4 justify-center w-full">
                 <p>{data?.exercicios?.find((i: any) => i.numero == index)?.numero}. {data.exercicios.find((i: any) => i.numero == index).enunciado}</p>
-                {loading ? (
+                {!loading ? (
                     <>
                         <div className="flex flex-col gap-3">
                             {Object.entries(data.exercicios.find((i: any) => i.numero == index).alternativas).filter(item => item[1] != null).map(([key, value]: any) => (
