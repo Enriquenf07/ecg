@@ -102,7 +102,7 @@ public class ModuloService {
 
     public ModuloDTO carregar(Integer id) throws Exception {
         Modulo modulo = repository.findById(id).orElseThrow(Exception::new);
-        return new ModuloDTO(modulo.getNome(), modulo.getId(), null, modulo.getNumero());
+        return new ModuloDTO(modulo.getNome(), modulo.getId(), null, modulo.getNumero(), null);
     }
 
 }

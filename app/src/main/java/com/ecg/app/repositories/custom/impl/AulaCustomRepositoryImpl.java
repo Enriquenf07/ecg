@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class AulaCustomRepositoryImpl implements AulaCustomRepository {
@@ -60,13 +61,16 @@ public class AulaCustomRepositoryImpl implements AulaCustomRepository {
                 .setParameter("aula", aula.getId())
                 .setParameter("usuario", usuario.getId())
                 .getResultList();
-
+                
+        AtomicInteger index = new AtomicInteger();
         return resultList.stream().map(item -> {
             String descricao = (String) item[0];
             Integer id = (Integer) item[1];
             Boolean concluido = (Boolean) item[2];
             Integer numero = (Integer) item[3]
-            return new ModuloDTO(descricao, id, concluido, numero);
+            Integer itemIndex = index.getAndIncrement();
+            Boolean desbloqueado = itemIndex == 0 || ((Boolean) resultList.get(itemIndex - 1)[2]);
+            return new ModuloDTO(descricao, id, concluido, numero, desbloqueado);
         }).collect(Collectors.toList());
     }
 }
