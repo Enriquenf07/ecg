@@ -67,7 +67,7 @@ public class AulaCustomRepositoryImpl implements AulaCustomRepository {
             String descricao = (String) item[0];
             Integer id = (Integer) item[1];
             Boolean concluido = (Boolean) item[2];
-            Integer numero = (Integer) item[3]
+            Integer numero = (Integer) item[3];
             Integer itemIndex = index.getAndIncrement();
             Boolean desbloqueado = itemIndex == 0 || ((Boolean) resultList.get(itemIndex - 1)[2]);
             return new ModuloDTO(descricao, id, concluido, numero, desbloqueado);
