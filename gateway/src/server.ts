@@ -47,5 +47,5 @@ app.get('/validateToken', async (req: Request, res: Response) => {
 })
 
 
-app.listen(6666, () => 'server running on port 3333')
+app.listen(5000, () => 'server running on port 3333')
 
