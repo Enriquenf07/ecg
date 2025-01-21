@@ -54,7 +54,7 @@ public class AulaCustomRepositoryImpl implements AulaCustomRepository {
         String sql =
                 "SELECT modulo.nome, modulo.id, modulo_usuario.concluido " +
                         "FROM modulo_usuario JOIN modulo ON modulo.id = modulo_usuario.modulo " +
-                        "WHERE modulo.aula = :aula AND modulo_usuario.usuario = :usuario";
+                        "WHERE modulo.aula = :aula AND modulo_usuario.usuario = :usuario ORDER BY modulo.numero ";
 
         List<Object[]> resultList =  entityManager.createNativeQuery(sql)
                 .setParameter("aula", aula.getId())
