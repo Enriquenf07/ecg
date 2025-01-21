@@ -52,9 +52,9 @@ public class AulaCustomRepositoryImpl implements AulaCustomRepository {
     @Override
     public List<ModuloDTO> getAllModulosByAula(Aula aula, Usuario usuario) {
         String sql =
-                "SELECT modulo.nome, modulo.id, modulo_usuario.concluido " +
+                "SELECT modulo.nome, modulo.id, modulo_usuario.concluido, modulo.numero " +
                         "FROM modulo_usuario JOIN modulo ON modulo.id = modulo_usuario.modulo " +
-                        "WHERE modulo.aula = :aula AND modulo_usuario.usuario = :usuario ORDER BY modulo.numero ";
+                        "WHERE modulo.aula = :aula AND modulo_usuario.usuario = :usuario ORDER BY modulo.numero ASC ";
 
         List<Object[]> resultList =  entityManager.createNativeQuery(sql)
                 .setParameter("aula", aula.getId())
@@ -65,7 +65,8 @@ public class AulaCustomRepositoryImpl implements AulaCustomRepository {
             String descricao = (String) item[0];
             Integer id = (Integer) item[1];
             Boolean concluido = (Boolean) item[2];
-            return new ModuloDTO(descricao, id, concluido);
+            Integer numero = (Integer) item[3]
+            return new ModuloDTO(descricao, id, concluido, numero);
         }).collect(Collectors.toList());
     }
 }
