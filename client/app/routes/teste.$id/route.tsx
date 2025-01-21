@@ -38,12 +38,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Index() {
     const data = useLoaderData<typeof loader>()
     const [index, setIndex] = useState(1)
-    const revalidator = useRevalidator();
     const { id } = useParams()
     const navigate = useNavigate()
     const submit = useSubmit()
     const fetcher = useFetcher();
-    const {state} = useNavigation()
+    const { state } = useNavigation()
 
 
     return (
@@ -56,8 +55,8 @@ export default function Index() {
                             {Object.entries(data.exercicios.find((i: any) => i.numero == index).alternativas).filter(item => item[1] != null).map(([key, value]: any) => (
                                 <fetcher.Form className="w-full flex flex-col" onSubmit={(e) => {
                                     const formData = new FormData(e.currentTarget);
-                                    const respostaData = {...formData, id, index, key}
-                                    submit(respostaData, { method: 'post',  });
+                                    const respostaData = { ...formData, id, index, key }
+                                    submit(respostaData, { method: 'post', });
                                     e.preventDefault()
                                 }}>
                                     <Button key={key} className={`${data.exercicios.find((i: any) => i.numero == index).resposta === key ? 'bg-amber-300' : 'bg-violet-300'} hover:bg-violet-600`} type="submit">{`${key}) ${value}`}</Button>
@@ -69,14 +68,16 @@ export default function Index() {
                             <Button onClick={() => setIndex(prev => prev <= 1 ? prev : prev - 1)}>Questão anterior</Button>
                             {index < data.exercicios.length ?
                                 <Button onClick={() => setIndex(prev => prev >= data.exercicios.length ? prev : prev + 1)}>Proxima questão</Button> :
-                                <Button className="bg-green-600 hover:bg-green-700" onClick={async () => {
-                                    if (id) {
-                                        await ModuloService(data.token).encerrarTeste(Number(id))
-                                    }
-                                    navigate(`../resultado/${id}`)
+                                <Form action="teste/concluir" method="post" onSubmit={(e) => {
+                                    const formData = new FormData(e.currentTarget);
+                                    const respostaData = { ...formData, id }
+                                    submit(respostaData, { action: '/teste/concluir' ,method: 'post', });
+                                    e.preventDefault()
                                 }}>
-                                    Terminar Teste
-                                </Button>
+                                    <Button className="bg-green-600 hover:bg-green-700" type='submit'>
+                                        Terminar Teste
+                                    </Button>
+                                </Form>
                             }
                         </div>
                     </>

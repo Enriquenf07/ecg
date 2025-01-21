@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/react";
 import axios from "axios";
 import cookie from 'cookie'
 
-export const jwtLoader = async ({ request }: { request: any }) => {
+export const jwtLoader = async ({ request }: { request: any }): Promise<string | undefined> => {
     const cookieHeader = request.headers.get("Cookie");
     const cookies = cookie.parse(cookieHeader || "");
     const encodedToken = cookies.jwt || ""

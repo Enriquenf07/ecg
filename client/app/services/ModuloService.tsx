@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const ModuloService = (token: string) => {
+export const ModuloService = (token?: string) => {
     
     const carregar = async (id: number) => {
         const response = await axios.get(`${process.env.API_HOST}/api/modulo/${id}`, {
