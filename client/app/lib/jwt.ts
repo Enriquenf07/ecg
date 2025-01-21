@@ -19,7 +19,7 @@ export const jwtLoader = async ({ request }: { request: any }) => {
             },
         });
     } catch (error) {
-        return null
+        return redirect('/')
     }
     return finalToken
 };

@@ -1,4 +1,5 @@
-import { json, redirect, useFetcher, useLoaderData, useNavigate, useNavigation, useParams, useRevalidator } from "@remix-run/react";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { Form, json, redirect, useFetcher, useLoaderData, useNavigate, useNavigation, useParams, useRevalidator, useSubmit } from "@remix-run/react";
 import axios from "axios";
 import { useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
@@ -16,7 +17,22 @@ export const loader = async ({ request, params }: { request: any, params: any })
             'Authorization': `Bearer ${finalToken}`,
         },
     });
-    return json({ ...response.data, token: finalToken });
+    return json({ ...response.data, token: finalToken, host: process.env.API_HOST });
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+    const finalToken = await jwtLoader({ request })
+    const body = await request.formData()
+    const id = body.get('id')
+    const index = body.get('index')
+    const key = body.get('key')
+    await axios.post(`${process.env.API_HOST}/api/modulo/${id}/teste/${index}/${key}`, {}, {
+        headers: {
+            'Authorization': `Bearer ${finalToken}`,
+        },
+    });
+    return null
+
 };
 
 export default function Index() {
@@ -25,29 +41,28 @@ export default function Index() {
     const revalidator = useRevalidator();
     const { id } = useParams()
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
+    const submit = useSubmit()
+    const fetcher = useFetcher();
+    const {state} = useNavigation()
+
 
     return (
         <Layout>
             <div className="flex flex-col gap-4 justify-center w-full">
                 <p>{data?.exercicios?.find((i: any) => i.numero == index)?.numero}. {data.exercicios.find((i: any) => i.numero == index).enunciado}</p>
-                {!loading ? (
+                {state === 'idle' ? (
                     <>
                         <div className="flex flex-col gap-3">
                             {Object.entries(data.exercicios.find((i: any) => i.numero == index).alternativas).filter(item => item[1] != null).map(([key, value]: any) => (
-                                <Button key={key} className={`${data.exercicios.find((i: any) => i.numero == index).resposta === key ? 'bg-amber-300' : 'bg-violet-300'} hover:bg-violet-600`} onClick={async () => {
-                                    setLoading(true)
-                                    try {
-                                        await axios.post(`${process.env.API_HOST}/api/modulo/${id}/teste/${index}/${key}`, {}, {
-                                            headers: {
-                                                'Authorization': `Bearer ${data.token}`,
-                                            },
-                                        });
-                                    } finally {
-                                        setLoading(false)
-                                    }
-                                    revalidator.revalidate()
-                                }}>{`${key}) ${value}`}</Button>
+                                <fetcher.Form className="w-full flex flex-col" onSubmit={(e) => {
+                                    const formData = new FormData(e.currentTarget);
+                                    const respostaData = {...formData, id, index, key}
+                                    submit(respostaData, { method: 'post',  });
+                                    e.preventDefault()
+                                }}>
+                                    <Button key={key} className={`${data.exercicios.find((i: any) => i.numero == index).resposta === key ? 'bg-amber-300' : 'bg-violet-300'} hover:bg-violet-600`} type="submit">{`${key}) ${value}`}</Button>
+                                </fetcher.Form>
+
                             ))}
                         </div>
                         <div className="flex gap-3 justify-end flex-col lg:flex-row">
@@ -67,7 +82,7 @@ export default function Index() {
                     </>
                 ) : (
                     <div className="w-full flex justify-center h-32 items-center">
-                        <BounceLoader color="#ff7f7f"/>
+                        <BounceLoader color="#ff7f7f" />
                     </div>
                 )}
             </div>
