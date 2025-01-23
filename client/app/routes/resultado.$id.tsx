@@ -8,8 +8,9 @@ import { ModuloService } from "~/services/ModuloService";
 import ReactPlayer from "react-player";
 import dayjs from 'dayjs';
 import { Button } from "~/components/ui/button";
+import { LoaderFunctionArgs } from "@remix-run/node";
 
-export const loader = async ({ request, params }: { request: any, params: any }) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const { id } = params
     const finalToken = await jwtLoader({ request })
     if (!finalToken) return null

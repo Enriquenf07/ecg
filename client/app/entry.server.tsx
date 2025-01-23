@@ -6,11 +6,12 @@
 
 import { PassThrough } from "node:stream";
 
-import type { AppLoadContext, EntryContext } from "@remix-run/node";
+import type { ActionFunctionArgs, AppLoadContext, EntryContext, LoaderFunctionArgs } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+import createLogger from "./lib/logger";
 
 const ABORT_DELAY = 5_000;
 
@@ -87,6 +88,20 @@ function handleBotRequest(
 
     setTimeout(abort, ABORT_DELAY);
   });
+}
+
+export async function handleError(
+  error: unknown,
+  {
+    request,
+    params,
+    context,
+  }: LoaderFunctionArgs | ActionFunctionArgs
+) {
+  if (!request.signal.aborted) {
+    const logger = await createLogger(request)
+    logger.error(error)
+  }
 }
 
 function handleBrowserRequest(

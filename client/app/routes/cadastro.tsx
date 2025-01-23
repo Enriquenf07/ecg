@@ -13,7 +13,6 @@ export const action = async ({ request }: { request: any }) => {
         const responseCadastro = await axios.post(`${process.env.API_HOST}/cadastro`, { login, email,password })
         return redirect('/');
     } catch (e) {
-        console.log('erro ao efetuar chamada na api')
         return redirect('/cadastro?message=Erro ao efetuar o cadastro');
     }
 };

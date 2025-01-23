@@ -1,11 +1,21 @@
 
+import { LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 import axios from "axios";
 import cookie from 'cookie'
+import createLogger from "./logger";
 
-export const jwtLoader = async ({ request }: { request: any }): Promise<string | undefined> => {
+export const logDefault = async(request: any) => {
+    const logger = await createLogger(request);
+    logger.info(`ping`)
+    
+}
+
+export const jwtLoader = async ({ request }: any) => {
     const cookieHeader = request.headers.get("Cookie");
+    await logDefault(request)
     const cookies = cookie.parse(cookieHeader || "");
+    
     const encodedToken = cookies.jwt || ""
     const token = Buffer.from(encodedToken, 'base64').toString('utf8')
     const finalToken = token.replace(/"/g, '').trim()
@@ -23,6 +33,7 @@ export const jwtLoader = async ({ request }: { request: any }): Promise<string |
     }
     return finalToken
 };
+
 
 export const jwtLoaderImpl = async ({ request }: { request: any }) => {
     const finalToken = await jwtLoader({ request })

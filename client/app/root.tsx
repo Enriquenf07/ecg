@@ -4,6 +4,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 
@@ -21,6 +22,38 @@ export const links: LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if(error.status === 404){
+    return (
+      <html>
+        <head>
+          <title>Oh no!</title>
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          <h1>404 - Página não encontrada</h1>
+          <Scripts />
+        </body>
+      </html>
+    );
+  }
+  return (
+    <html>
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>Erro inesperado</h1>
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

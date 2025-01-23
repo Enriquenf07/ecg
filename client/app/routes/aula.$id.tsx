@@ -12,7 +12,6 @@ export const loader = async ({ request, params }: { request: any, params: any })
 
     const response = await AulasService(finalToken).pesquisarModulos(id)
     const info = await AulasService(finalToken).carregar(id)
-    console.log(response)
     return json({ modulos: response.data, token: finalToken, info: info.data });
 };
 

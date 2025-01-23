@@ -54,3 +54,8 @@ export const cadastro = async (cadastro: IUserCadastro) => {
     })
 
 }
+
+export const getById = async(id: number):Promise<string> => {
+    const {login} = await knex.select('login').from('usuario').where('id', id).first()
+    return login
+}

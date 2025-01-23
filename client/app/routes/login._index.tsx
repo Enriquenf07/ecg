@@ -28,7 +28,7 @@ const initialForm = {
 export async function loader({ request }: { request: any }) {
     const cookieHeader = request.headers.get('Cookie');
     const cookie = await jwtCookie.parse(cookieHeader);
-    if(!cookie){
+    if (!cookie) {
         return null
     }
     try {
@@ -40,13 +40,19 @@ export async function loader({ request }: { request: any }) {
         if (response.status === 200) {
             return redirect('/app')
         }
-    }finally{
+    } finally {
         return json({ token: cookie });
     }
-    
+
 }
 
 export const jwtCookie = createCookie('jwt', {
+    httpOnly: true,
+    path: '/',
+    sameSite: 'lax',
+});
+
+export const loginCookie = createCookie('login', {
     httpOnly: true,
     path: '/',
     sameSite: 'lax',
@@ -62,16 +68,16 @@ export const action = async ({ request }: { request: any }) => {
         const token = response.data.accessToken
         if (token) {
             const cookieHeader = await jwtCookie.serialize(token);
+            const loginHeader = await loginCookie.serialize(login);
             return redirect('/app', {
                 headers: {
-                    "Set-Cookie": cookieHeader,
+                  'Set-Cookie': `${cookieHeader}, ${loginHeader}`, // Concatenando os cookies
                 },
-            });
+              });
         }
 
         return redirect('/login?message=Login ou senha inválidos');
     } catch (e) {
-        console.log('erro ao efetuar chamada na api')
         return redirect('/login?message=Login ou senha inválidos');
     }
 };
