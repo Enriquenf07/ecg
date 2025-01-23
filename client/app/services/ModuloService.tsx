@@ -46,7 +46,7 @@ export const ModuloService = (token?: string) => {
     }
 
     const carregarExercicios = async (id: number, teste: number) => {
-        const response = await axios.get(`${process.env.API_HOST}/api//modulo/${id}/resultado/${teste}`, {
+        const response = await axios.get(`${process.env.API_HOST}/api/modulo/${id}/resultado/${teste}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
